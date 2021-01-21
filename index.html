@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat App</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <br />
+      <div class="jumbotron">
+        <h1 class="display-4">Send Message</h1>
+        <br />
+        <input id="name" class="form-control" placeholder="Name" />
+        <br />
+        <textarea
+          id="message"
+          class="form-control"
+          placeholder="message"
+        ></textarea>
+        <br />
+        <button id="send" class="btn btn-success">Send</button>
+      </div>
+      <div id="messages"></div>
+    </div>
+    <script>
+      $(() => {
+        $("#send").click(() => {
+          const message = {
+            name: $("#name").val(),
+            message: $("#message").val(),
+          };
+          sendMessage(message);
+        });
+        getMessages();
+      });
+
+      function addMessages(message) {
+        $("#messages").append(
+          `<h4> ${message.name} </h4> <p> ${message.message}</p>`
+        );
+      }
+
+      function getMessages() {
+        $.get("http://localhost:3010/messages", (data) => {
+          data.forEach(addMessages);
+        });
+      }
+
+      function sendMessage(message) {
+        $.post("http://localhost:3010/messages", message);
+      }
+    </script>
+  </body>
+</html>
